@@ -1809,6 +1809,9 @@ mod tests {
         assert!(!args.iter().any(|a| a.starts_with("--ytdl-raw-options=")));
     }
 
+    // Windows builds intentionally expose VLC only; Termux detection is not
+    // applicable on this platform and must not run in the Windows test suite.
+    #[cfg(not(target_os = "windows"))]
     #[test]
     fn test_detect_prioritizes_android_intent_on_termux() {
         let temp_dir = std::env::temp_dir().join(format!("termux_test_{}", std::process::id()));
