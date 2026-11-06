@@ -75,30 +75,30 @@ pub fn detect() -> Vec<PlayerKind> {
 
     #[cfg(not(target_os = "windows"))]
     {
-    let is_termux = crate::config::is_termux_environment();
-    let has_gui = has_graphical_display();
-    if is_termux && !has_gui && !android_openers().is_empty() {
-        players.push(PlayerKind::AndroidIntent);
-    }
+        let is_termux = crate::config::is_termux_environment();
+        let has_gui = has_graphical_display();
+        if is_termux && !has_gui && !android_openers().is_empty() {
+            players.push(PlayerKind::AndroidIntent);
+        }
 
-    #[cfg(target_os = "macos")]
-    if iina_resolution().is_some() {
-        players.push(PlayerKind::Iina);
-    }
+        #[cfg(target_os = "macos")]
+        if iina_resolution().is_some() {
+            players.push(PlayerKind::Iina);
+        }
 
-    if mpv_executable().is_some() {
-        players.push(PlayerKind::Mpv);
-    }
+        if mpv_executable().is_some() {
+            players.push(PlayerKind::Mpv);
+        }
 
-    if vlc_executable().is_some() {
-        players.push(PlayerKind::Vlc);
-    }
+        if vlc_executable().is_some() {
+            players.push(PlayerKind::Vlc);
+        }
 
-    if (!is_termux || has_gui) && !android_openers().is_empty() {
-        players.push(PlayerKind::AndroidIntent);
-    }
+        if (!is_termux || has_gui) && !android_openers().is_empty() {
+            players.push(PlayerKind::AndroidIntent);
+        }
 
-    players
+        players
     }
 }
 

@@ -52,7 +52,10 @@ impl App {
 
         self.state.available_players = crate::tui::player::detect();
         #[cfg(target_os = "windows")]
-        if self.state.available_players.contains(&crate::tui::state::PlayerKind::Vlc)
+        if self
+            .state
+            .available_players
+            .contains(&crate::tui::state::PlayerKind::Vlc)
             && self.state.default_player.as_deref() != Some("vlc")
         {
             self.state.default_player = Some("vlc".to_string());
