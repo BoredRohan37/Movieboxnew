@@ -27,7 +27,7 @@ jobs:
 
     steps:
       - name: Check out source
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Install Rust nightly and rust-src
         shell: pwsh
@@ -53,7 +53,7 @@ jobs:
           Get-Item $exe | Format-List FullName, Length, LastWriteTime
 
       - name: Upload executable
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: MovieBox-Tui-Windows81-x64-VLC
           path: target/x86_64-win7-windows-msvc/release/moviebox-tui.exe
