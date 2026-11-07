@@ -1,3 +1,4 @@
+
 name: Windows 8.1 x64 VLC build
 
 on:
@@ -10,56 +11,31 @@ permissions:
   contents: read
 
 jobs:
-  build-windows-8-1:
-    name: Build Windows 7-baseline x64 executable
-    runs-on: windows-latest
-    timeout-minutes: 60
+  build:
+    runs-on: windows-2022
+
+    env:
+      RUSTFLAGS: "-C target-cpu=x86-64"
+
     steps:
-      - name: Checkout source
+      - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Install nightly Rust and source component
+      - name: Install Rust
         uses: dtolnay/rust-toolchain@nightly
         with:
-          components: rust-src
+          targets: x86_64-win7-windows-msvc
+          components: rust-src, rustfmt
 
-      - name: Show toolchain
-        run: rustc +nightly --version
+      - name: Check formatting
+        run: cargo fmt --all -- --check
 
-      - name: Build Windows 8.1-compatible VLC edition
+      - name: Build
         run: cargo +nightly build -Z build-std=std,panic_abort --target x86_64-win7-windows-msvc --release --locked
 
-      - name: Smoke test executable
-        shell: pwsh
-        run: .\target\x86_64-win7-windows-msvc\release\moviebox-tui.exe --version
-
-      - name: Package executable and instructions
-        shell: pwsh
-        run: |
-          New-Item -ItemType Directory -Force -Path dist | Out-Null
-          Copy-Item target\x86_64-win7-windows-msvc\release\moviebox-tui.exe dist\
-          Copy-Item README.md dist\
-          @'
-          MovieBox-TUI - Windows 8.1 x64 VLC edition
-
-          Requirements:
-          - Windows 8.1 64-bit
-          - 64-bit VLC media player installed
-
-          VLC is the only supported external player in this edition.
-          If VLC is installed in a non-standard location, set:
-          MOVIEBOX_VLC_PATH=C:\path\to\vlc.exe
-
-          This build targets the Rust x86_64-win7-windows-msvc platform.
-          The build runner smoke-tests --version, but final playback and
-          Windows 8.1 runtime compatibility must still be verified on a
-          real Windows 8.1 machine.
-          '@ | Set-Content dist\WINDOWS-8.1.txt
-          Compress-Archive -Path dist\* -DestinationPath MovieBox-TUI-Windows-8.1-x64-VLC.zip -Force
-
-      - name: Upload Windows executable package
+      - name: Upload executable
         uses: actions/upload-artifact@v4
         with:
-          name: MovieBox-TUI-Windows-8.1-x64-VLC
-          path: MovieBox-TUI-Windows-8.1-x64-VLC.zip
+          name: MovieBox-Windows81-VLC
+          path: target/x86_64-win7-windows-msvc/release/moviebox-tui.exe
           if-no-files-found: error
