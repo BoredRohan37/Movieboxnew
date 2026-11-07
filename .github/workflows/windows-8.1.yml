@@ -2,6 +2,9 @@ name: Windows 8.1 x64 VLC build
 
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - main
 
 permissions:
   contents: read
