@@ -13,7 +13,7 @@ jobs:
     timeout-minutes: 60
     steps:
       - name: Checkout source
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Install nightly Rust and source component
         uses: dtolnay/rust-toolchain@nightly
@@ -55,7 +55,7 @@ jobs:
           Compress-Archive -Path dist\* -DestinationPath MovieBox-TUI-Windows-8.1-x64-VLC.zip -Force
 
       - name: Upload Windows executable package
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: MovieBox-TUI-Windows-8.1-x64-VLC
           path: MovieBox-TUI-Windows-8.1-x64-VLC.zip
